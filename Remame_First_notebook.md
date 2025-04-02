@@ -367,6 +367,26 @@ Identifies the type of dwelling involved in the sale.
 [*back to feature list*](#feature-list)
 
 
+```python
+df['Id'].describe()
+```
+
+
+
+
+    count    1460.000000
+    mean      730.500000
+    std       421.610009
+    min         1.000000
+    25%       365.750000
+    50%       730.500000
+    75%      1095.250000
+    max      1460.000000
+    Name: Id, dtype: float64
+
+
+
+
 MSZoning: Identifies the general zoning classification of the sale.
 		
 ***Categories***:
