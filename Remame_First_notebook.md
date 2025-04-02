@@ -85,7 +85,7 @@ print(df.head().to_markdown())
 ```python
 import seaborn as sns
 
-sns.lmplot(data = df, x='MSSubClass', y='MoSold');
+sns.lmplot(data = df, x='MSSubClass', y='MoSold'); #fff
 ```
 
 
