@@ -77,59 +77,156 @@ print(df.head().to_markdown())
 ```python
 import seaborn as sns
 
-sns.lmplot(data = df, x='MSSubClass', y='MoSold')
+sns.lmplot(data = df, x='MSSubClass', y='MoSold');
 ```
 
 
-
-
-    <seaborn.axisgrid.FacetGrid at 0x2877fbd5640>
-
-
-
-
     
-![png](Remame_First_notebook_files/Remame_First_notebook_9_1.png)
+![png](Remame_First_notebook_files/Remame_First_notebook_9_0.png)
     
+
 
 
 ```python
-PoolQC          2908
-MiscFeature     2812
-Alley           2719
-Fence           2346
-SalePrice       1459
-FireplaceQu     1420
-LotFrontage      486
-GarageQual       159
-GarageCond       159
-GarageFinish     159
-GarageYrBlt      159
-GarageType       157
-BsmtExposure      82
-BsmtCond          82
-BsmtQual          81
-BsmtFinType2      80
-BsmtFinType1      79
-MasVnrType        24
-MasVnrArea        23
-MSZoning           4
-BsmtFullBath       2
-BsmtHalfBath       2
-Utilities          2
-Functional         2
-Electrical         1
-BsmtUnfSF          1
-Exterior1st        1
-Exterior2nd        1
-TotalBsmtSF        1
-GarageCars         1
-BsmtFinSF2         1
-BsmtFinSF1         1
-KitchenQual        1
-SaleType           1
-GarageArea         1
+df.groupby(['MSSubClass'])[['SalePrice']].agg(['mean','median','count'])
 ```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead tr th {
+        text-align: left;
+    }
+
+    .dataframe thead tr:last-of-type th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="3" halign="left">SalePrice</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>mean</th>
+      <th>median</th>
+      <th>count</th>
+    </tr>
+    <tr>
+      <th>MSSubClass</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>20</th>
+      <td>185224.811567</td>
+      <td>159250.0</td>
+      <td>536</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>95829.724638</td>
+      <td>99900.0</td>
+      <td>69</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>156125.000000</td>
+      <td>142500.0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>108591.666667</td>
+      <td>107500.0</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>143302.972222</td>
+      <td>132000.0</td>
+      <td>144</td>
+    </tr>
+    <tr>
+      <th>60</th>
+      <td>239948.501672</td>
+      <td>215200.0</td>
+      <td>299</td>
+    </tr>
+    <tr>
+      <th>70</th>
+      <td>166772.416667</td>
+      <td>156000.0</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>192437.500000</td>
+      <td>163500.0</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>169736.551724</td>
+      <td>166500.0</td>
+      <td>58</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>147810.000000</td>
+      <td>140750.0</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>133541.076923</td>
+      <td>135980.0</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>120</th>
+      <td>200779.080460</td>
+      <td>192000.0</td>
+      <td>87</td>
+    </tr>
+    <tr>
+      <th>160</th>
+      <td>138647.380952</td>
+      <td>146000.0</td>
+      <td>63</td>
+    </tr>
+    <tr>
+      <th>180</th>
+      <td>102300.000000</td>
+      <td>88500.0</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>190</th>
+      <td>129613.333333</td>
+      <td>128250.0</td>
+      <td>30</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 
 <BR><BR>
 # **1. Domain Knowledge, Feature review and transformation plan**
