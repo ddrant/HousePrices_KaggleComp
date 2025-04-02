@@ -54,7 +54,7 @@ StylerRenderer.render = lambda self, **kwargs: ""
 
 pd.set_option('max_colwidth',200)
 pd.set_option('display.width',200)
-pd.set_option('display.max_columns',500) # test
+pd.set_option('display.max_columns',500) 
 pd.set_option('display.max_rows',1000)
 ```
 
