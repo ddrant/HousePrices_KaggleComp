@@ -41,6 +41,196 @@ The model we are going to use for this project is **XGBoost** or Extreme Gradien
 8. Explainability (SHAP, feature importance)  
 9. Refine + resubmit  
 
+<details>
+<summary>Click to expand code</summary>
+
+```python
+import pandas as pd
+df = pd.read_csv(r".\data\train.csv")
+df.describe()
+
+
+
+```python
+import pandas as pd
+df = pd.read_csv(r".\data\train.csv")
+df.describe()
+
+df.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Id</th>
+      <th>MSSubClass</th>
+      <th>MSZoning</th>
+      <th>LotFrontage</th>
+      <th>LotArea</th>
+      <th>Street</th>
+      <th>Alley</th>
+      <th>LotShape</th>
+      <th>LandContour</th>
+      <th>Utilities</th>
+      <th>...</th>
+      <th>PoolArea</th>
+      <th>PoolQC</th>
+      <th>Fence</th>
+      <th>MiscFeature</th>
+      <th>MiscVal</th>
+      <th>MoSold</th>
+      <th>YrSold</th>
+      <th>SaleType</th>
+      <th>SaleCondition</th>
+      <th>SalePrice</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>60</td>
+      <td>RL</td>
+      <td>65.0</td>
+      <td>8450</td>
+      <td>Pave</td>
+      <td>NaN</td>
+      <td>Reg</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>2</td>
+      <td>2008</td>
+      <td>WD</td>
+      <td>Normal</td>
+      <td>208500</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>20</td>
+      <td>RL</td>
+      <td>80.0</td>
+      <td>9600</td>
+      <td>Pave</td>
+      <td>NaN</td>
+      <td>Reg</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>5</td>
+      <td>2007</td>
+      <td>WD</td>
+      <td>Normal</td>
+      <td>181500</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>60</td>
+      <td>RL</td>
+      <td>68.0</td>
+      <td>11250</td>
+      <td>Pave</td>
+      <td>NaN</td>
+      <td>IR1</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>9</td>
+      <td>2008</td>
+      <td>WD</td>
+      <td>Normal</td>
+      <td>223500</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>70</td>
+      <td>RL</td>
+      <td>60.0</td>
+      <td>9550</td>
+      <td>Pave</td>
+      <td>NaN</td>
+      <td>IR1</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>2</td>
+      <td>2006</td>
+      <td>WD</td>
+      <td>Abnorml</td>
+      <td>140000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>60</td>
+      <td>RL</td>
+      <td>84.0</td>
+      <td>14260</td>
+      <td>Pave</td>
+      <td>NaN</td>
+      <td>IR1</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>12</td>
+      <td>2008</td>
+      <td>WD</td>
+      <td>Normal</td>
+      <td>250000</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 81 columns</p>
+</div>
+
+
+
 <BR><BR>
 # **1. Domain Knowledge, Feature review and transformation plan**
 
@@ -62,84 +252,84 @@ SalePrice - the property's sale price in dollars. This is the target variable th
 
 ## **Feature List**
 [**MSSubClass:**](#mssubclass) The building class<BR>
-**MSZoning:** The general zoning classification<BR>
-**LotFrontage:** Linear feet of street connected to property<BR>
-**LotArea:** Lot size in square feet<BR>
-**Street:** Type of road access<BR>
-**Alley:** Type of alley access<BR>
-**LotShape:** General shape of property<BR>
-**LandContour:** Flatness of the property<BR>
-**Utilities:** Type of utilities available<BR>
-**LotConfig:** Lot configuration<BR>
-**LandSlope:** Slope of property<BR>
-**Neighborhood:** Physical locations within Ames city limits<BR>
-**Condition1:** Proximity to main road or railroad<BR>
-**Condition2:** Proximity to main road or railroad (if a second is present)<BR>
-**BldgType:** Type of dwelling<BR>
-**HouseStyle:** Style of dwelling<BR>
-**OverallQual:** Overall material and finish quality<BR>
-**OverallCond:** Overall condition rating<BR>
-**YearBuilt:** Original construction date<BR>
-**YearRemodAdd:** Remodel date<BR>
-**RoofStyle:** Type of roof<BR>
-**RoofMatl:** Roof material<BR>
-**Exterior1st:** Exterior covering on house<BR>
-**Exterior2nd:** Exterior covering on house (if more than one material)<BR>
-**MasVnrType:** Masonry veneer type<BR>
-**MasVnrArea:** Masonry veneer area in square feet<BR>
-**ExterQual:** Exterior material quality<BR>
-**ExterCond:** Present condition of the material on the exterior<BR>
-**Foundation:** Type of foundation<BR>
-**BsmtQual:** Height of the basement<BR>
-**BsmtCond:** General condition of the basement<BR>
-**BsmtExposure:** Walkout or garden level basement walls<BR>
-**BsmtFinType1:** Quality of basement finished area<BR>
-**BsmtFinSF1:** Type 1 finished square feet<BR>
-**BsmtFinType2:** Quality of second finished area (if present)<BR>
-**BsmtFinSF2:** Type 2 finished square feet<BR>
-**BsmtUnfSF:** Unfinished square feet of basement area<BR>
-**TotalBsmtSF:** Total square feet of basement area<BR>
-**Heating:** Type of heating<BR>
-**HeatingQC:** Heating quality and condition<BR>
-**CentralAir:** Central air conditioning<BR>
-**Electrical:** Electrical system<BR>
-**1stFlrSF:** First Floor square feet<BR>
-**2ndFlrSF:** Second floor square feet<BR>
-**LowQualFinSF:** Low quality finished square feet (all floors)<BR>
-**GrLivArea:** Above grade (ground) living area square feet<BR>
-**BsmtFullBath:** Basement full bathrooms<BR>
-**BsmtHalfBath:** Basement half bathrooms<BR>
-**FullBath:** Full bathrooms above grade<BR>
-**HalfBath:** Half baths above grade<BR>
-**Bedroom:** Number of bedrooms above basement level<BR>
-**Kitchen:** Number of kitchens<BR>
-**KitchenQual:** Kitchen quality<BR>
-**TotRmsAbvGrd:** Total rooms above grade (does not include bathrooms)<BR>
-**Functional:** Home functionality rating<BR>
-**Fireplaces:** Number of fireplaces<BR>
-**FireplaceQu:** Fireplace quality<BR>
-**GarageType:** Garage location<BR>
-**GarageYrBlt:** Year garage was built<BR>
-**GarageFinish:** Interior finish of the garage<BR>
-**GarageCars:** Size of garage in car capacity<BR>
-**GarageArea:** Size of garage in square feet<BR>
-**GarageQual:** Garage quality<BR>
-**GarageCond:** Garage condition<BR>
-**PavedDrive:** Paved driveway<BR>
-**WoodDeckSF:** Wood deck area in square feet<BR>
-**OpenPorchSF:** Open porch area in square feet<BR>
-**EnclosedPorch:** Enclosed porch area in square feet<BR>
-**3SsnPorch:** Three season porch area in square feet<BR>
-**ScreenPorch:** Screen porch area in square feet<BR>
-**PoolArea:** Pool area in square feet<BR>
-**PoolQC:** Pool quality<BR>
-**Fence:** Fence quality<BR>
-**MiscFeature:** Miscellaneous feature not covered in other categories<BR>
-**MiscVal:** $Value of miscellaneous feature<BR>
-**MoSold:** Month Sold<BR>
-**YrSold:** Year Sold<BR>
-**SaleType:** Type of sale<BR>
-**SaleCondition:** Condition of sale<BR>
+[**MSZoning:**]() The general zoning classification<BR>
+[**LotFrontage:**](#lotfrontage) Linear feet of street connected to property<BR>
+[**LotArea:**](#lotarea) Lot size in square feet<BR>
+[**Street:**](#street) Type of road access<BR>
+[**Alley:**](#alley) Type of alley access<BR>
+[**LotShape:**](#lotshape) General shape of property<BR>
+[**LandContour:**](#landcontour) Flatness of the property<BR>
+[**Utilities:**](#utilities) Type of utilities available<BR>
+[**LotConfig:**]() Lot configuration<BR>
+[**LandSlope:**]() Slope of property<BR>
+[**Neighborhood:**]() Physical locations within Ames city limits<BR>
+[**Condition1:**]() Proximity to main road or railroad<BR>
+[**Condition2:**]() Proximity to main road or railroad (if a second is present)<BR>
+[**BldgType:**]() Type of dwelling<BR>
+[**HouseStyle:**]() Style of dwelling<BR>
+[**OverallQual:**]() Overall material and finish quality<BR>
+[**OverallCond:**]() Overall condition rating<BR>
+[**YearBuilt:**]() Original construction date<BR>
+[**YearRemodAdd:**]() Remodel date<BR>
+[**RoofStyle:**]() Type of roof<BR>
+[**RoofMatl:**]() Roof material<BR>
+[**Exterior1st:**]() Exterior covering on house<BR>
+[**Exterior2nd:**]() Exterior covering on house (if more than one material)<BR>
+[**MasVnrType:**]() Masonry veneer type<BR>
+[**MasVnrArea:**]() Masonry veneer area in square feet<BR>
+[**ExterQual:**]() Exterior material quality<BR>
+[**ExterCond:**]() Present condition of the material on the exterior<BR>
+[**Foundation:**]() Type of foundation<BR>
+[**BsmtQual:**]() Height of the basement<BR>
+[**BsmtCond:**]() General condition of the basement<BR>
+[**BsmtExposure:**]() Walkout or garden level basement walls<BR>
+[**BsmtFinType1:**]() Quality of basement finished area<BR>
+[**BsmtFinSF1:**]() Type 1 finished square feet<BR>
+[**BsmtFinType2:**]() Quality of second finished area (if present)<BR>
+[**BsmtFinSF2:**]() Type 2 finished square feet<BR>
+[**BsmtUnfSF:**]() Unfinished square feet of basement area<BR>
+[**TotalBsmtSF:**]() Total square feet of basement area<BR>
+[**Heating:**]() Type of heating<BR>
+[**HeatingQC:**]() Heating quality and condition<BR>
+[**CentralAir:**]() Central air conditioning<BR>
+[**Electrical:**]() Electrical system<BR>
+[**1stFlrSF:**]() First Floor square feet<BR>
+[**2ndFlrSF:**]() Second floor square feet<BR>
+[**LowQualFinSF:**]() Low quality finished square feet (all floors)<BR>
+[**GrLivArea:**]() Above grade (ground) living area square feet<BR>
+[**BsmtFullBath:**]() Basement full bathrooms<BR>
+[**BsmtHalfBath:**]() Basement half bathrooms<BR>
+[**FullBath:**]() Full bathrooms above grade<BR>
+[**HalfBath:**]() Half baths above grade<BR>
+[**Bedroom:**]() Number of bedrooms above basement level<BR>
+[**Kitchen:**]() Number of kitchens<BR>
+[**KitchenQual:**]() Kitchen quality<BR>
+[**TotRmsAbvGrd:**]() Total rooms above grade (does not include bathrooms)<BR>
+[**Functional:**]() Home functionality rating<BR>
+[**Fireplaces:**]() Number of fireplaces<BR>
+[**FireplaceQu:**]() Fireplace quality<BR>
+[**GarageType:**]() Garage location<BR>
+[**GarageYrBlt:**]() Year garage was built<BR>
+[**GarageFinish:**]() Interior finish of the garage<BR>
+[**GarageCars:**]() Size of garage in car capacity<BR>
+[**GarageArea:**]() Size of garage in square feet<BR>
+[**GarageQual:**]() Garage quality<BR>
+[**GarageCond:**]() Garage condition<BR>
+[**PavedDrive:**]() Paved driveway<BR>
+[**WoodDeckSF:**]() Wood deck area in square feet<BR>
+[**OpenPorchSF:**]() Open porch area in square feet<BR>
+[**EnclosedPorch:**]() Enclosed porch area in square feet<BR>
+[**3SsnPorch:**]() Three season porch area in square feet<BR>
+[**ScreenPorch:**]() Screen porch area in square feet<BR>
+[**PoolArea:**]() Pool area in square feet<BR>
+[**PoolQC:**]() Pool quality<BR>
+[**Fence:**]() Fence quality<BR>
+[**MiscFeature:**]() Miscellaneous feature not covered in other categories<BR>
+[**MiscVal:**]() $Value of miscellaneous feature<BR>
+[**MoSold:**]() Month Sold<BR>
+[**YrSold:**]() Year Sold<BR>
+[**SaleType:**]() Type of sale<BR>
+[**SaleCondition:**]() Condition of sale<BR>
 
 ## **MSSubClass**
 ***description:***
@@ -172,6 +362,8 @@ Identifies the type of dwelling involved in the sale.
 
 MSZoning: Identifies the general zoning classification of the sale.
 		
+***Categories***:
+
        A	Agriculture
        C	Commercial
        FV	Floating Village Residential
@@ -183,69 +375,82 @@ MSZoning: Identifies the general zoning classification of the sale.
 	
 
 
-LotFrontage: Linear feet of street connected to property
+## **LotFrontage:**
+***Description:*** Linear feet of street connected to property
 
+[*back to feature list*](#feature-list)
 
+## **LotArea:**
+***Description:*** Lot size in square feet
 
-LotArea: Lot size in square feet
+[*back to feature list*](#feature-list)
 
-
-
-Street: Type of road access to property
+## **Street:**
+***Description:*** Type of road access to property
 
        Grvl	Gravel	
        Pave	Paved
 
-
+[*back to feature list*](#feature-list)
        	
-Alley: Type of alley access to property
+## **Alley:**
+***Description:*** Type of alley access to property
 
        Grvl	Gravel
        Pave	Paved
        NA 	No alley access
 		
+[*back to feature list*](#feature-list)
 
-
-LotShape: General shape of property
+## **LotShape:** 
+***Description:*** General shape of property
 
        Reg	Regular	
        IR1	Slightly irregular
        IR2	Moderately Irregular
        IR3	Irregular
 
-
+[*back to feature list*](#feature-list)
        
-### LandContour: Flatness of the property
+## **LandContour:** 
+***Description:*** Flatness of the property
 
        Lvl	Near Flat/Level	
        Bnk	Banked - Quick and significant rise from street grade to building
        HLS	Hillside - Significant slope from side to side
        Low	Depression
 
-
+[*back to feature list*](#feature-list)
 		
-Utilities: Type of utilities available
-		
+## **Utilities:** 
+***Description:*** Type of utilities available
+		 
        AllPub	All public Utilities (E,G,W,& S)	
        NoSewr	Electricity, Gas, and Water (Septic Tank)
        NoSeWa	Electricity and Gas Only
        ELO	Electricity only	
+[*back to feature list*](#feature-list)
 	
-LotConfig: Lot configuration
+## **LotConfig:** 
+***Description:*** Lot configuration
 
        Inside	Inside lot
        Corner	Corner lot
        CulDSac	Cul-de-sac
        FR2	Frontage on 2 sides of property
        FR3	Frontage on 3 sides of property
+[*back to feature list*](#feature-list)
 	
-LandSlope: Slope of property
+## **LandSlope:** 
+***Description:*** Slope of property
 		
        Gtl	Gentle slope
        Mod	Moderate Slope	
        Sev	Severe Slope
+[*back to feature list*](#feature-list)
 	
-Neighborhood: Physical locations within Ames city limits
+## **Neighborhood:** 
+***Description:*** Physical locations within Ames city limits
 
        Blmngtn	Bloomington Heights
        Blueste	Bluestem
@@ -272,8 +477,10 @@ Neighborhood: Physical locations within Ames city limits
        StoneBr	Stone Brook
        Timber	Timberland
        Veenker	Veenker
+[*back to feature list*](#feature-list)
 			
-Condition1: Proximity to various conditions
+## **Condition1:** 
+***Description:*** Proximity to various conditions
 	
        Artery	Adjacent to arterial street
        Feedr	Adjacent to feeder street	
@@ -284,8 +491,10 @@ Condition1: Proximity to various conditions
        PosA	Adjacent to postive off-site feature
        RRNe	Within 200' of East-West Railroad
        RRAe	Adjacent to East-West Railroad
+[*back to feature list*](#feature-list)
 	
-Condition2: Proximity to various conditions (if more than one is present)
+## **Condition2:** 
+***Description:*** Proximity to various conditions (if more than one is present)
 		
        Artery	Adjacent to arterial street
        Feedr	Adjacent to feeder street	
@@ -296,16 +505,20 @@ Condition2: Proximity to various conditions (if more than one is present)
        PosA	Adjacent to postive off-site feature
        RRNe	Within 200' of East-West Railroad
        RRAe	Adjacent to East-West Railroad
+[*back to feature list*](#feature-list)
 	
-BldgType: Type of dwelling
+## **BldgType:** 
+***Description:*** Type of dwelling
 		
        1Fam	Single-family Detached	
        2FmCon	Two-family Conversion; originally built as one-family dwelling
        Duplx	Duplex
        TwnhsE	Townhouse End Unit
        TwnhsI	Townhouse Inside Unit
+[*back to feature list*](#feature-list)
 	
-HouseStyle: Style of dwelling
+## **HouseStyle:** 
+***Description:*** Style of dwelling
 	
        1Story	One story
        1.5Fin	One and one-half story: 2nd level finished
@@ -315,8 +528,10 @@ HouseStyle: Style of dwelling
        2.5Unf	Two and one-half story: 2nd level unfinished
        SFoyer	Split Foyer
        SLvl	Split Level
+[*back to feature list*](#feature-list)
 	
-OverallQual: Rates the overall material and finish of the house
+## **OverallQual:** 
+***Description:*** Rates the overall material and finish of the house
 
        10	Very Excellent
        9	Excellent
@@ -328,8 +543,10 @@ OverallQual: Rates the overall material and finish of the house
        3	Fair
        2	Poor
        1	Very Poor
+[*back to feature list*](#feature-list)
 	
-OverallCond: Rates the overall condition of the house
+## **OverallCond:** 
+***Description:*** Rates the overall condition of the house
 
        10	Very Excellent
        9	Excellent
@@ -341,12 +558,18 @@ OverallCond: Rates the overall condition of the house
        3	Fair
        2	Poor
        1	Very Poor
+[*back to feature list*](#feature-list)
 		
-YearBuilt: Original construction date
+## **YearBuilt:** 
+***Description:*** Original construction date
+[*back to feature list*](#feature-list)
 
-YearRemodAdd: Remodel date (same as construction date if no remodeling or additions)
+## **YearRemodAdd:** 
+***Description:*** Remodel date (same as construction date if no remodeling or additions)
+[*back to feature list*](#feature-list)
 
-RoofStyle: Type of roof
+## **RoofStyle:** 
+***Description:*** Type of roof
 
        Flat	Flat
        Gable	Gable
@@ -354,8 +577,10 @@ RoofStyle: Type of roof
        Hip	Hip
        Mansard	Mansard
        Shed	Shed
+[*back to feature list*](#feature-list)
 		
-RoofMatl: Roof material
+## **RoofMatl:** 
+***Description:*** Roof material
 
        ClyTile	Clay or Tile
        CompShg	Standard (Composite) Shingle
@@ -365,8 +590,10 @@ RoofMatl: Roof material
        Tar&Grv	Gravel & Tar
        WdShake	Wood Shakes
        WdShngl	Wood Shingles
+[*back to feature list*](#feature-list)
 		
-Exterior1st: Exterior covering on house
+## **Exterior1st:** 
+***Description:*** Exterior covering on house
 
        AsbShng	Asbestos Shingles
        AsphShn	Asphalt Shingles
@@ -385,8 +612,10 @@ Exterior1st: Exterior covering on house
        VinylSd	Vinyl Siding
        Wd Sdng	Wood Siding
        WdShing	Wood Shingles
+[*back to feature list*](#feature-list)
 	
-Exterior2nd: Exterior covering on house (if more than one material)
+## **Exterior2nd:** 
+***Description:*** Exterior covering on house (if more than one material)
 
        AsbShng	Asbestos Shingles
        AsphShn	Asphalt Shingles
@@ -405,34 +634,44 @@ Exterior2nd: Exterior covering on house (if more than one material)
        VinylSd	Vinyl Siding
        Wd Sdng	Wood Siding
        WdShing	Wood Shingles
+[*back to feature list*](#feature-list)
 	
-MasVnrType: Masonry veneer type
+## **MasVnrType:** 
+***Description:*** Masonry veneer type
 
        BrkCmn	Brick Common
        BrkFace	Brick Face
        CBlock	Cinder Block
        None	None
        Stone	Stone
+[*back to feature list*](#feature-list)
 	
-MasVnrArea: Masonry veneer area in square feet
+## **MasVnrArea:** 
+***Description:*** Masonry veneer area in square feet
+[*back to feature list*](#feature-list)
 
-ExterQual: Evaluates the quality of the material on the exterior 
+## **ExterQual:** 
+***Description:*** Evaluates the quality of the material on the exterior 
 		
        Ex	Excellent
        Gd	Good
        TA	Average/Typical
        Fa	Fair
        Po	Poor
+[*back to feature list*](#feature-list)
 		
-ExterCond: Evaluates the present condition of the material on the exterior
+## **ExterCond:** 
+***Description:*** Evaluates the present condition of the material on the exterior
 		
        Ex	Excellent
        Gd	Good
        TA	Average/Typical
        Fa	Fair
        Po	Poor
+[*back to feature list*](#feature-list)
 		
-Foundation: Type of foundation
+## **Foundation:** 
+***Description:*** Type of foundation
 		
        BrkTil	Brick & Tile
        CBlock	Cinder Block
@@ -440,8 +679,10 @@ Foundation: Type of foundation
        Slab	Slab
        Stone	Stone
        Wood	Wood
+[*back to feature list*](#feature-list)
 		
-BsmtQual: Evaluates the height of the basement
+## **BsmtQual:** 
+***Description:*** Evaluates the height of the basement
 
        Ex	Excellent (100+ inches)	
        Gd	Good (90-99 inches)
@@ -449,8 +690,10 @@ BsmtQual: Evaluates the height of the basement
        Fa	Fair (70-79 inches)
        Po	Poor (<70 inches
        NA	No Basement
+[*back to feature list*](#feature-list)
 		
-BsmtCond: Evaluates the general condition of the basement
+## **BsmtCond:** 
+***Description:*** Evaluates the general condition of the basement
 
        Ex	Excellent
        Gd	Good
@@ -458,16 +701,20 @@ BsmtCond: Evaluates the general condition of the basement
        Fa	Fair - dampness or some cracking or settling
        Po	Poor - Severe cracking, settling, or wetness
        NA	No Basement
+[*back to feature list*](#feature-list)
 	
-BsmtExposure: Refers to walkout or garden level walls
+## **BsmtExposure:** 
+***Description:*** Refers to walkout or garden level walls
 
        Gd	Good Exposure
        Av	Average Exposure (split levels or foyers typically score average or above)	
        Mn	Mimimum Exposure
        No	No Exposure
        NA	No Basement
+[*back to feature list*](#feature-list)
 	
-BsmtFinType1: Rating of basement finished area
+## **BsmtFinType1:** 
+***Description:*** Rating of basement finished area
 
        GLQ	Good Living Quarters
        ALQ	Average Living Quarters
@@ -476,10 +723,14 @@ BsmtFinType1: Rating of basement finished area
        LwQ	Low Quality
        Unf	Unfinshed
        NA	No Basement
+[*back to feature list*](#feature-list)
 		
-BsmtFinSF1: Type 1 finished square feet
+## **BsmtFinSF1:** 
+***Description:*** Type 1 finished square feet
+[*back to feature list*](#feature-list)
 
-BsmtFinType2: Rating of basement finished area (if multiple types)
+## **BsmtFinType2:** 
+***Description:*** Rating of basement finished area (if multiple types)
 
        GLQ	Good Living Quarters
        ALQ	Average Living Quarters
@@ -488,14 +739,22 @@ BsmtFinType2: Rating of basement finished area (if multiple types)
        LwQ	Low Quality
        Unf	Unfinshed
        NA	No Basement
+[*back to feature list*](#feature-list)
 
-BsmtFinSF2: Type 2 finished square feet
+## **BsmtFinSF2:** 
+***Description:*** Type 2 finished square feet
+[*back to feature list*](#feature-list)
 
-BsmtUnfSF: Unfinished square feet of basement area
+## **BsmtUnfSF:** 
+***Description:*** Unfinished square feet of basement area
+[*back to feature list*](#feature-list)
 
-TotalBsmtSF: Total square feet of basement area
+## **TotalBsmtSF:** 
+***Description:*** Total square feet of basement area
+[*back to feature list*](#feature-list)
 
-Heating: Type of heating
+## **Heating:** 
+***Description:*** Type of heating
 		
        Floor	Floor Furnace
        GasA	Gas forced warm air furnace
@@ -503,59 +762,91 @@ Heating: Type of heating
        Grav	Gravity furnace	
        OthW	Hot water or steam heat other than gas
        Wall	Wall furnace
+[*back to feature list*](#feature-list)
 		
-HeatingQC: Heating quality and condition
+## **HeatingQC:** 
+***Description:*** Heating quality and condition
 
        Ex	Excellent
        Gd	Good
        TA	Average/Typical
        Fa	Fair
        Po	Poor
+[*back to feature list*](#feature-list)
 		
-CentralAir: Central air conditioning
+## **CentralAir:** 
+***Description:*** Central air conditioning
 
        N	No
        Y	Yes
+[*back to feature list*](#feature-list)
 		
-Electrical: Electrical system
+## **Electrical:** 
+***Description:*** Electrical system
 
        SBrkr	Standard Circuit Breakers & Romex
        FuseA	Fuse Box over 60 AMP and all Romex wiring (Average)	
        FuseF	60 AMP Fuse Box and mostly Romex wiring (Fair)
        FuseP	60 AMP Fuse Box and mostly knob & tube wiring (poor)
        Mix	Mixed
+[*back to feature list*](#feature-list)
 		
-1stFlrSF: First Floor square feet
+## **1stFlrSF:** 
+***Description:*** First Floor square feet
+[*back to feature list*](#feature-list)
  
-2ndFlrSF: Second floor square feet
+## **2ndFlrSF:** 
+***Description:*** Second floor square feet
+[*back to feature list*](#feature-list)
 
-LowQualFinSF: Low quality finished square feet (all floors)
+## **LowQualFinSF:** 
+***Description:*** Low quality finished square feet (all floors)
+[*back to feature list*](#feature-list)
 
-GrLivArea: Above grade (ground) living area square feet
+## **GrLivArea:** 
+***Description:*** Above grade (ground) living area square feet
+[*back to feature list*](#feature-list)
 
-BsmtFullBath: Basement full bathrooms
+## **BsmtFullBath:** 
+***Description:*** Basement full bathrooms
+[*back to feature list*](#feature-list)
 
-BsmtHalfBath: Basement half bathrooms
+## **BsmtHalfBath:** 
+***Description:*** Basement half bathrooms
+[*back to feature list*](#feature-list)
 
-FullBath: Full bathrooms above grade
+## **FullBath:** 
+***Description:*** Full bathrooms above grade
+[*back to feature list*](#feature-list)
 
-HalfBath: Half baths above grade
+## **HalfBath:** 
+***Description:*** Half baths above grade
+[*back to feature list*](#feature-list)
 
-Bedroom: Bedrooms above grade (does NOT include basement bedrooms)
+## **Bedroom:** 
+***Description:*** Bedrooms above grade (does NOT include basement bedrooms)
+[*back to feature list*](#feature-list)
 
-Kitchen: Kitchens above grade
+## **Kitchen:** 
+***Description:*** Kitchens above grade
+[*back to feature list*](#feature-list)
 
-KitchenQual: Kitchen quality
+## **KitchenQual:** 
+***Description:*** Kitchen quality
 
        Ex	Excellent
        Gd	Good
        TA	Typical/Average
        Fa	Fair
        Po	Poor
+[*back to feature list*](#feature-list)
        	
-TotRmsAbvGrd: Total rooms above grade (does not include bathrooms)
+## **TotRmsAbvGrd:** 
+***Description:*** Total rooms above grade (does not include bathrooms)
+[*back to feature list*](#feature-list)
 
-Functional: Home functionality (Assume typical unless deductions are warranted)
+## **Functional:** 
+***Description:*** Home functionality (Assume typical unless deductions are warranted)
 
        Typ	Typical Functionality
        Min1	Minor Deductions 1
@@ -565,10 +856,14 @@ Functional: Home functionality (Assume typical unless deductions are warranted)
        Maj2	Major Deductions 2
        Sev	Severely Damaged
        Sal	Salvage only
+[*back to feature list*](#feature-list)
 		
-Fireplaces: Number of fireplaces
+## **Fireplaces:** 
+***Description:*** Number of fireplaces
+[*back to feature list*](#feature-list)
 
-FireplaceQu: Fireplace quality
+## **FireplaceQu:** 
+***Description:*** Fireplace quality
 
        Ex	Excellent - Exceptional Masonry Fireplace
        Gd	Good - Masonry Fireplace in main level
@@ -576,8 +871,10 @@ FireplaceQu: Fireplace quality
        Fa	Fair - Prefabricated Fireplace in basement
        Po	Poor - Ben Franklin Stove
        NA	No Fireplace
+[*back to feature list*](#feature-list)
 		
-GarageType: Garage location
+## **GarageType:** 
+***Description:*** Garage location
 		
        2Types	More than one type of garage
        Attchd	Attached to home
@@ -586,21 +883,31 @@ GarageType: Garage location
        CarPort	Car Port
        Detchd	Detached from home
        NA	No Garage
+[*back to feature list*](#feature-list)
 		
-GarageYrBlt: Year garage was built
+## **GarageYrBlt:** 
+***Description:*** Year garage was built
+[*back to feature list*](#feature-list)
 		
-GarageFinish: Interior finish of the garage
+## **GarageFinish:** 
+***Description:*** Interior finish of the garage
 
        Fin	Finished
        RFn	Rough Finished	
        Unf	Unfinished
        NA	No Garage
+[*back to feature list*](#feature-list)
 		
-GarageCars: Size of garage in car capacity
+## **GarageCars:** 
+***Description:*** Size of garage in car capacity
+[*back to feature list*](#feature-list)
 
-GarageArea: Size of garage in square feet
+## **GarageArea:** 
+***Description:*** Size of garage in square feet
+[*back to feature list*](#feature-list)
 
-GarageQual: Garage quality
+## **GarageQual:** 
+***Description:*** Garage quality
 
        Ex	Excellent
        Gd	Good
@@ -608,8 +915,10 @@ GarageQual: Garage quality
        Fa	Fair
        Po	Poor
        NA	No Garage
+[*back to feature list*](#feature-list)
 		
-GarageCond: Garage condition
+## **GarageCond:** 
+***Description:*** Garage condition
 
        Ex	Excellent
        Gd	Good
@@ -617,34 +926,52 @@ GarageCond: Garage condition
        Fa	Fair
        Po	Poor
        NA	No Garage
+[*back to feature list*](#feature-list)
 		
-PavedDrive: Paved driveway
+## **PavedDrive:** 
+***Description:*** Paved driveway
 
        Y	Paved 
        P	Partial Pavement
        N	Dirt/Gravel
+[*back to feature list*](#feature-list)
 		
-WoodDeckSF: Wood deck area in square feet
+## **WoodDeckSF:** 
+***Description:*** Wood deck area in square feet
+[*back to feature list*](#feature-list)
 
-OpenPorchSF: Open porch area in square feet
+## **OpenPorchSF:** 
+***Description:*** Open porch area in square feet
+[*back to feature list*](#feature-list)
 
-EnclosedPorch: Enclosed porch area in square feet
+## **EnclosedPorch:** 
+***Description:*** Enclosed porch area in square feet
+[*back to feature list*](#feature-list)
 
-3SsnPorch: Three season porch area in square feet
+## **3SsnPorch:** 
+***Description:*** Three season porch area in square feet
+[*back to feature list*](#feature-list)
 
-ScreenPorch: Screen porch area in square feet
+## **ScreenPorch:** 
+***Description:*** Screen porch area in square feet
+[*back to feature list*](#feature-list)
 
-PoolArea: Pool area in square feet
+## **PoolArea:** 
+***Description:*** Pool area in square feet
+[*back to feature list*](#feature-list)
 
-PoolQC: Pool quality
+## **PoolQC:** 
+***Description:*** Pool quality
 		
        Ex	Excellent
        Gd	Good
        TA	Average/Typical
        Fa	Fair
        NA	No Pool
+[*back to feature list*](#feature-list)
 		
-Fence: Fence quality
+## **Fence:** 
+***Description:*** Fence quality
 		
        GdPrv	Good Privacy
        MnPrv	Minimum Privacy
@@ -652,8 +979,10 @@ Fence: Fence quality
        MnWw	Minimum Wood/Wire
        NA	No Fence
 
+[*back to feature list*](#feature-list)
 	
-MiscFeature: Miscellaneous feature not covered in other categories
+## **MiscFeature:** 
+***Description:*** Miscellaneous feature not covered in other categories
 		
        Elev	Elevator
        Gar2	2nd Garage (if not described in garage section)
@@ -661,14 +990,22 @@ MiscFeature: Miscellaneous feature not covered in other categories
        Shed	Shed (over 100 SF)
        TenC	Tennis Court
        NA	None
+[*back to feature list*](#feature-list)
 		
-MiscVal: $Value of miscellaneous feature
+## **MiscVal:** 
+***Description:*** $Value of miscellaneous feature
+[*back to feature list*](#feature-list)
 
-MoSold: Month Sold (MM)
+## **MoSold:** 
+***Description:*** Month Sold (MM)
+[*back to feature list*](#feature-list)
 
-YrSold: Year Sold (YYYY)
+## **YrSold:** 
+***Description:*** Year Sold (YYYY)
+[*back to feature list*](#feature-list)
 
-SaleType: Type of sale
+## **SaleType:** 
+***Description:*** Type of sale
 		
        WD 	Warranty Deed - Conventional
        CWD	Warranty Deed - Cash
@@ -680,8 +1017,10 @@ SaleType: Type of sale
        ConLI	Contract Low Interest
        ConLD	Contract Low Down
        Oth	Other
+[*back to feature list*](#feature-list)
 		
-SaleCondition: Condition of sale
+## **SaleCondition:** 
+***Description:*** Condition of sale
 
        Normal	Normal Sale
        Abnorml	Abnormal Sale -  trade, foreclosure, short sale
