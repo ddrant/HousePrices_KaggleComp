@@ -44,6 +44,13 @@ The model we are going to use for this project is **XGBoost** or Extreme Gradien
 <details> <!-- remove from .ipynb file, this is for md convert -->
 <summary>Markdown (.md) set up code</Summary>
 
+
+```python
+from pandas.io.formats.style_render import StylerRenderer
+
+StylerRenderer.render = lambda self, **kwargs: ""
+```
+
 </details>
 
 <Details>
