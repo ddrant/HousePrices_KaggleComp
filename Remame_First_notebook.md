@@ -45,11 +45,17 @@ The model we are going to use for this project is **XGBoost** or Extreme Gradien
 
 
 ```python
+import pandas as pd
 from pandas.io.formats.style_render import StylerRenderer
 
 StylerRenderer.render = lambda self, **kwargs: ""
 
 #stestse
+
+pd.set_option('max_colwidth',200)
+pd.set_option('display.width',200)
+pd.set_option('display.max_columns',500) # test
+pd.set_option('display.max_rows',1000)
 ```
 
 </details>
@@ -394,7 +400,24 @@ df.describe()
       <th>YearRemodAdd</th>
       <th>MasVnrArea</th>
       <th>BsmtFinSF1</th>
-      <th>...</th>
+      <th>BsmtFinSF2</th>
+      <th>BsmtUnfSF</th>
+      <th>TotalBsmtSF</th>
+      <th>1stFlrSF</th>
+      <th>2ndFlrSF</th>
+      <th>LowQualFinSF</th>
+      <th>GrLivArea</th>
+      <th>BsmtFullBath</th>
+      <th>BsmtHalfBath</th>
+      <th>FullBath</th>
+      <th>HalfBath</th>
+      <th>BedroomAbvGr</th>
+      <th>KitchenAbvGr</th>
+      <th>TotRmsAbvGrd</th>
+      <th>Fireplaces</th>
+      <th>GarageYrBlt</th>
+      <th>GarageCars</th>
+      <th>GarageArea</th>
       <th>WoodDeckSF</th>
       <th>OpenPorchSF</th>
       <th>EnclosedPorch</th>
@@ -420,7 +443,24 @@ df.describe()
       <td>1460.000000</td>
       <td>1452.000000</td>
       <td>1460.000000</td>
-      <td>...</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
+      <td>1379.000000</td>
+      <td>1460.000000</td>
+      <td>1460.000000</td>
       <td>1460.000000</td>
       <td>1460.000000</td>
       <td>1460.000000</td>
@@ -444,7 +484,24 @@ df.describe()
       <td>1984.865753</td>
       <td>103.685262</td>
       <td>443.639726</td>
-      <td>...</td>
+      <td>46.549315</td>
+      <td>567.240411</td>
+      <td>1057.429452</td>
+      <td>1162.626712</td>
+      <td>346.992466</td>
+      <td>5.844521</td>
+      <td>1515.463699</td>
+      <td>0.425342</td>
+      <td>0.057534</td>
+      <td>1.565068</td>
+      <td>0.382877</td>
+      <td>2.866438</td>
+      <td>1.046575</td>
+      <td>6.517808</td>
+      <td>0.613014</td>
+      <td>1978.506164</td>
+      <td>1.767123</td>
+      <td>472.980137</td>
       <td>94.244521</td>
       <td>46.660274</td>
       <td>21.954110</td>
@@ -468,7 +525,24 @@ df.describe()
       <td>20.645407</td>
       <td>181.066207</td>
       <td>456.098091</td>
-      <td>...</td>
+      <td>161.319273</td>
+      <td>441.866955</td>
+      <td>438.705324</td>
+      <td>386.587738</td>
+      <td>436.528436</td>
+      <td>48.623081</td>
+      <td>525.480383</td>
+      <td>0.518911</td>
+      <td>0.238753</td>
+      <td>0.550916</td>
+      <td>0.502885</td>
+      <td>0.815778</td>
+      <td>0.220338</td>
+      <td>1.625393</td>
+      <td>0.644666</td>
+      <td>24.689725</td>
+      <td>0.747315</td>
+      <td>213.804841</td>
       <td>125.338794</td>
       <td>66.256028</td>
       <td>61.119149</td>
@@ -492,7 +566,24 @@ df.describe()
       <td>1950.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>...</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>334.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>334.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2.000000</td>
+      <td>0.000000</td>
+      <td>1900.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
@@ -516,7 +607,24 @@ df.describe()
       <td>1967.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
-      <td>...</td>
+      <td>0.000000</td>
+      <td>223.000000</td>
+      <td>795.750000</td>
+      <td>882.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1129.500000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+      <td>2.000000</td>
+      <td>1.000000</td>
+      <td>5.000000</td>
+      <td>0.000000</td>
+      <td>1961.000000</td>
+      <td>1.000000</td>
+      <td>334.500000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
@@ -540,7 +648,24 @@ df.describe()
       <td>1994.000000</td>
       <td>0.000000</td>
       <td>383.500000</td>
-      <td>...</td>
+      <td>0.000000</td>
+      <td>477.500000</td>
+      <td>991.500000</td>
+      <td>1087.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1464.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>2.000000</td>
+      <td>0.000000</td>
+      <td>3.000000</td>
+      <td>1.000000</td>
+      <td>6.000000</td>
+      <td>1.000000</td>
+      <td>1980.000000</td>
+      <td>2.000000</td>
+      <td>480.000000</td>
       <td>0.000000</td>
       <td>25.000000</td>
       <td>0.000000</td>
@@ -564,7 +689,24 @@ df.describe()
       <td>2004.000000</td>
       <td>166.000000</td>
       <td>712.250000</td>
-      <td>...</td>
+      <td>0.000000</td>
+      <td>808.000000</td>
+      <td>1298.250000</td>
+      <td>1391.250000</td>
+      <td>728.000000</td>
+      <td>0.000000</td>
+      <td>1776.750000</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+      <td>2.000000</td>
+      <td>1.000000</td>
+      <td>3.000000</td>
+      <td>1.000000</td>
+      <td>7.000000</td>
+      <td>1.000000</td>
+      <td>2002.000000</td>
+      <td>2.000000</td>
+      <td>576.000000</td>
       <td>168.000000</td>
       <td>68.000000</td>
       <td>0.000000</td>
@@ -588,7 +730,24 @@ df.describe()
       <td>2010.000000</td>
       <td>1600.000000</td>
       <td>5644.000000</td>
-      <td>...</td>
+      <td>1474.000000</td>
+      <td>2336.000000</td>
+      <td>6110.000000</td>
+      <td>4692.000000</td>
+      <td>2065.000000</td>
+      <td>572.000000</td>
+      <td>5642.000000</td>
+      <td>3.000000</td>
+      <td>2.000000</td>
+      <td>3.000000</td>
+      <td>2.000000</td>
+      <td>8.000000</td>
+      <td>3.000000</td>
+      <td>14.000000</td>
+      <td>3.000000</td>
+      <td>2010.000000</td>
+      <td>4.000000</td>
+      <td>1418.000000</td>
       <td>857.000000</td>
       <td>547.000000</td>
       <td>552.000000</td>
@@ -602,7 +761,6 @@ df.describe()
     </tr>
   </tbody>
 </table>
-<p>8 rows × 38 columns</p>
 </div>
 
 
