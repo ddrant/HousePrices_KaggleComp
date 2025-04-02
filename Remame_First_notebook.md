@@ -41,20 +41,20 @@ The model we are going to use for this project is **XGBoost** or Extreme Gradien
 8. Explainability (SHAP, feature importance)  
 9. Refine + resubmit  
 
-<details>
-<summary>Click to expand code</summary>
+<details> <!-- remove from .ipynb file, this is for md convert -->
+<summary>Markdown (.md) set up code</Summary>
 
-<BR>
 
 ```python
-import pandas as pd
-df = pd.read_csv(r".\data\train.csv")
-df.describe()
+from pandas.io.formats.style_render import StylerRenderer
+
+StylerRenderer.render = lambda self, **kwargs: ""
 ```
+
 </details>
 
 <Details>
-<Summary>Expand</Summary>
+<Summary>Data Set-up code</Summary>
 
 
 ```python
