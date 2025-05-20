@@ -819,7 +819,7 @@ cmap = cm.get_cmap('plasma')
 palette = [cmap(norm(counts[category])) for category in order]
 
 # Set the plot
-plot = sns.catplot(data=df, x='SalePrice', y='MSSubClass', kind='boxen',  height=7, aspect=1.8, palette=palette, orient='h')
+plot = sns.catplot(data=df, x='SalePrice', y='MSSubClass', kind='boxen',  height=15, aspect=1.8, palette=palette, orient='h')
 
 # Set the y-ticks
 plot.set_yticklabels(labels, rotation=90)
@@ -830,7 +830,7 @@ plt.yticks(rotation=0)
 # Create a scalar mappable
 sm = cm.ScalarMappable(cmap=cmap, norm=norm) # norm is our normalisation of the value counts into [0,1] to map to the colors on the cmap
 
-cbar = plot.figure.colorbar(sm, ax=plot.ax, aspect=50, location='right')
+cbar = plot.figure.colorbar(sm, ax=plot.ax, aspect=45, location='right')
 cbar.set_label('Number of Instances')
 
 # colorbar ticks for lognorm cmap
@@ -843,13 +843,13 @@ plt.title("SalesPrice by HSSubclass")
 plt.show()
 ```
 
-    C:\Users\Scotts\AppData\Local\Temp\ipykernel_45816\3741891665.py:43: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
+    C:\Users\Scotts\AppData\Local\Temp\ipykernel_20132\938059188.py:43: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
       cmap = cm.get_cmap('plasma')
-    C:\Users\Scotts\AppData\Local\Temp\ipykernel_45816\3741891665.py:51: FutureWarning: 
+    C:\Users\Scotts\AppData\Local\Temp\ipykernel_20132\938059188.py:51: FutureWarning: 
     
     Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `y` variable to `hue` and set `legend=False` for the same effect.
     
-      plot = sns.catplot(data=df, x='SalePrice', y='MSSubClass', kind='boxen',  height=7, aspect=1.8, palette=palette, orient='h')
+      plot = sns.catplot(data=df, x='SalePrice', y='MSSubClass', kind='boxen',  height=15, aspect=1.8, palette=palette, orient='h')
     
 
 
