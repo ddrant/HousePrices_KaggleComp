@@ -46,6 +46,8 @@ The model we are going to use for this project is **XGBoost** or Extreme Gradien
 
 ```python
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 from pandas.io.formats.style_render import StylerRenderer
 
 StylerRenderer.render = lambda self, **kwargs: ""
@@ -624,7 +626,7 @@ SalePrice - the property's sale price in dollars. This is the target variable th
 
 ## **Feature List**
 [**MSSubClass:**](#mssubclass) The building class<BR>
-[**MSZoning:**]() The general zoning classification<BR>
+[**MSZoning:**](#mszoning) The general zoning classification<BR>
 [**LotFrontage:**](#lotfrontage) Linear feet of street connected to property<BR>
 [**LotArea:**](#lotarea) Lot size in square feet<BR>
 [**Street:**](#street) Type of road access<BR>
@@ -632,76 +634,76 @@ SalePrice - the property's sale price in dollars. This is the target variable th
 [**LotShape:**](#lotshape) General shape of property<BR>
 [**LandContour:**](#landcontour) Flatness of the property<BR>
 [**Utilities:**](#utilities) Type of utilities available<BR>
-[**LotConfig:**]() Lot configuration<BR>
-[**LandSlope:**]() Slope of property<BR>
-[**Neighborhood:**]() Physical locations within Ames city limits<BR>
-[**Condition1:**]() Proximity to main road or railroad<BR>
-[**Condition2:**]() Proximity to main road or railroad (if a second is present)<BR>
-[**BldgType:**]() Type of dwelling<BR>
-[**HouseStyle:**]() Style of dwelling<BR>
-[**OverallQual:**]() Overall material and finish quality<BR>
-[**OverallCond:**]() Overall condition rating<BR>
-[**YearBuilt:**]() Original construction date<BR>
-[**YearRemodAdd:**]() Remodel date<BR>
-[**RoofStyle:**]() Type of roof<BR>
-[**RoofMatl:**]() Roof material<BR>
-[**Exterior1st:**]() Exterior covering on house<BR>
-[**Exterior2nd:**]() Exterior covering on house (if more than one material)<BR>
-[**MasVnrType:**]() Masonry veneer type<BR>
-[**MasVnrArea:**]() Masonry veneer area in square feet<BR>
-[**ExterQual:**]() Exterior material quality<BR>
-[**ExterCond:**]() Present condition of the material on the exterior<BR>
-[**Foundation:**]() Type of foundation<BR>
-[**BsmtQual:**]() Height of the basement<BR>
-[**BsmtCond:**]() General condition of the basement<BR>
-[**BsmtExposure:**]() Walkout or garden level basement walls<BR>
-[**BsmtFinType1:**]() Quality of basement finished area<BR>
-[**BsmtFinSF1:**]() Type 1 finished square feet<BR>
-[**BsmtFinType2:**]() Quality of second finished area (if present)<BR>
-[**BsmtFinSF2:**]() Type 2 finished square feet<BR>
-[**BsmtUnfSF:**]() Unfinished square feet of basement area<BR>
-[**TotalBsmtSF:**]() Total square feet of basement area<BR>
-[**Heating:**]() Type of heating<BR>
-[**HeatingQC:**]() Heating quality and condition<BR>
-[**CentralAir:**]() Central air conditioning<BR>
-[**Electrical:**]() Electrical system<BR>
-[**1stFlrSF:**]() First Floor square feet<BR>
-[**2ndFlrSF:**]() Second floor square feet<BR>
-[**LowQualFinSF:**]() Low quality finished square feet (all floors)<BR>
-[**GrLivArea:**]() Above grade (ground) living area square feet<BR>
-[**BsmtFullBath:**]() Basement full bathrooms<BR>
-[**BsmtHalfBath:**]() Basement half bathrooms<BR>
-[**FullBath:**]() Full bathrooms above grade<BR>
-[**HalfBath:**]() Half baths above grade<BR>
-[**Bedroom:**]() Number of bedrooms above basement level<BR>
-[**Kitchen:**]() Number of kitchens<BR>
-[**KitchenQual:**]() Kitchen quality<BR>
-[**TotRmsAbvGrd:**]() Total rooms above grade (does not include bathrooms)<BR>
-[**Functional:**]() Home functionality rating<BR>
-[**Fireplaces:**]() Number of fireplaces<BR>
-[**FireplaceQu:**]() Fireplace quality<BR>
-[**GarageType:**]() Garage location<BR>
-[**GarageYrBlt:**]() Year garage was built<BR>
-[**GarageFinish:**]() Interior finish of the garage<BR>
-[**GarageCars:**]() Size of garage in car capacity<BR>
-[**GarageArea:**]() Size of garage in square feet<BR>
-[**GarageQual:**]() Garage quality<BR>
-[**GarageCond:**]() Garage condition<BR>
-[**PavedDrive:**]() Paved driveway<BR>
-[**WoodDeckSF:**]() Wood deck area in square feet<BR>
-[**OpenPorchSF:**]() Open porch area in square feet<BR>
-[**EnclosedPorch:**]() Enclosed porch area in square feet<BR>
-[**3SsnPorch:**]() Three season porch area in square feet<BR>
-[**ScreenPorch:**]() Screen porch area in square feet<BR>
-[**PoolArea:**]() Pool area in square feet<BR>
-[**PoolQC:**]() Pool quality<BR>
-[**Fence:**]() Fence quality<BR>
-[**MiscFeature:**]() Miscellaneous feature not covered in other categories<BR>
-[**MiscVal:**]() $Value of miscellaneous feature<BR>
-[**MoSold:**]() Month Sold<BR>
-[**YrSold:**]() Year Sold<BR>
-[**SaleType:**]() Type of sale<BR>
-[**SaleCondition:**]() Condition of sale<BR>
+[**LotConfig:**](#lotconfig) Lot configuration<BR>
+[**LandSlope:**](#landslope) Slope of property<BR>
+[**Neighborhood:**](#neighborhood) Physical locations within Ames city limits<BR>
+[**Condition1:**](#condition1) Proximity to main road or railroad<BR>
+[**Condition2:**](#condition2) Proximity to main road or railroad (if a second is present)<BR>
+[**BldgType:**](#bldgtype) Type of dwelling<BR>
+[**HouseStyle:**](#housestyle) Style of dwelling<BR>
+[**OverallQual:**](#overallqual) Overall material and finish quality<BR>
+[**OverallCond:**](#overallcond) Overall condition rating<BR>
+[**YearBuilt:**](#yearbuilt) Original construction date<BR>
+[**YearRemodAdd:**](#yearremodadd) Remodel date<BR>
+[**RoofStyle:**](#roofstyle) Type of roof<BR>
+[**RoofMatl:**](#roofmatl) Roof material<BR>
+[**Exterior1st:**](#exterior1st) Exterior covering on house<BR>
+[**Exterior2nd:**](#exterior2nd) Exterior covering on house (if more than one material)<BR>
+[**MasVnrType:**](#masvnrtype) Masonry veneer type<BR>
+[**MasVnrArea:**](#masvnrarea) Masonry veneer area in square feet<BR>
+[**ExterQual:**](#exterqual) Exterior material quality<BR>
+[**ExterCond:**](#extercond) Present condition of the material on the exterior<BR>
+[**Foundation:**](#foundation) Type of foundation<BR>
+[**BsmtQual:**](#bsmtqual) Height of the basement<BR>
+[**BsmtCond:**](#bsmtcond) General condition of the basement<BR>
+[**BsmtExposure:**](#bsmtexposure) Walkout or garden level basement walls<BR>
+[**BsmtFinType1:**](#bsmtfintype1) Quality of basement finished area<BR>
+[**BsmtFinSF1:**](#bsmtfinsf1) Type 1 finished square feet<BR>
+[**BsmtFinType2:**](#bsmtfintype2) Quality of second finished area (if present)<BR>
+[**BsmtFinSF2:**](#bsmtfinsf2) Type 2 finished square feet<BR>
+[**BsmtUnfSF:**](#bsmtunfsf) Unfinished square feet of basement area<BR>
+[**TotalBsmtSF:**](#totalbsmtsf) Total square feet of basement area<BR>
+[**Heating:**](#heating) Type of heating<BR>
+[**HeatingQC:**](#heatingqc) Heating quality and condition<BR>
+[**CentralAir:**](#centralair) Central air conditioning<BR>
+[**Electrical:**](#electrical) Electrical system<BR>
+[**1stFlrSF:**](#1stflrsf) First Floor square feet<BR>
+[**2ndFlrSF:**](#2ndflrsf) Second floor square feet<BR>
+[**LowQualFinSF:**](#lowqualfinsf) Low quality finished square feet (all floors)<BR>
+[**GrLivArea:**](#grlivarea) Above grade (ground) living area square feet<BR>
+[**BsmtFullBath:**](#bsmtfullbath) Basement full bathrooms<BR>
+[**BsmtHalfBath:**](#bsmthalfbath) Basement half bathrooms<BR>
+[**FullBath:**](#fullbath) Full bathrooms above grade<BR>
+[**HalfBath:**](#halfbath) Half baths above grade<BR>
+[**Bedroom:**](#bedroom) Number of bedrooms above basement level<BR>
+[**Kitchen:**](#kitchen) Number of kitchens<BR>
+[**KitchenQual:**](#kitchenqual) Kitchen quality<BR>
+[**TotRmsAbvGrd:**](#totrmsabvgrd) Total rooms above grade (does not include bathrooms)<BR>
+[**Functional:**](#functional) Home functionality rating<BR>
+[**Fireplaces:**](#fireplaces) Number of fireplaces<BR>
+[**FireplaceQu:**](#fireplacequ) Fireplace quality<BR>
+[**GarageType:**](#garagetype) Garage location<BR>
+[**GarageYrBlt:**](#garageyrblt) Year garage was built<BR>
+[**GarageFinish:**](#garagefinish) Interior finish of the garage<BR>
+[**GarageCars:**](#garagecars) Size of garage in car capacity<BR>
+[**GarageArea:**](#garagearea) Size of garage in square feet<BR>
+[**GarageQual:**](#garagequal) Garage quality<BR>
+[**GarageCond:**](#garagecond) Garage condition<BR>
+[**PavedDrive:**](#paveddrive) Paved driveway<BR>
+[**WoodDeckSF:**](#wooddecksf) Wood deck area in square feet<BR>
+[**OpenPorchSF:**](#openporchsf) Open porch area in square feet<BR>
+[**EnclosedPorch:**](#enclosedporch) Enclosed porch area in square feet<BR>
+[**3SsnPorch:**](#3ssnporch) Three season porch area in square feet<BR>
+[**ScreenPorch:**](#screenporch) Screen porch area in square feet<BR>
+[**PoolArea:**](#poolarea) Pool area in square feet<BR>
+[**PoolQC:**](#poolqc) Pool quality<BR>
+[**Fence:**](#fence) Fence quality<BR>
+[**MiscFeature:**](#miscfeature) Miscellaneous feature not covered in other categories<BR>
+[**MiscVal:**](#miscval) $Value of miscellaneous feature<BR>
+[**MoSold:**](#mosold) Month Sold<BR>
+[**YrSold:**](#yrsold) Year Sold<BR>
+[**SaleType:**](#saletype) Type of sale<BR>
+[**SaleCondition:**](#salecondition) Condition of sale<BR>
 
 ## **MSSubClass**
 ***description:***
@@ -710,29 +712,191 @@ Identifies the type of dwelling involved in the sale.
 
 ***Categories:***
 
-        Value  Description
-        20	1-STORY 1946 & NEWER ALL STYLES
-        30	1-STORY 1945 & OLDER
-        40	1-STORY W/FINISHED ATTIC ALL AGES
-        45	1-1/2 STORY - UNFINISHED ALL AGES
-        50	1-1/2 STORY FINISHED ALL AGES
-        60	2-STORY 1946 & NEWER
-        70	2-STORY 1945 & OLDER
-        75	2-1/2 STORY ALL AGES
-        80	SPLIT OR MULTI-LEVEL
-        85	SPLIT FOYER
-        90	DUPLEX - ALL STYLES AND AGES
-       120	1-STORY PUD (Planned Unit Development) - 1946 & NEWER
-       150	1-1/2 STORY PUD - ALL AGES
-       160	2-STORY PUD - 1946 & NEWER
-       180	PUD - MULTILEVEL - INCL SPLIT LEV/FOYER
-       190	2 FAMILY CONVERSION - ALL STYLES AND AGES
+| Value | Description                                   | Notes / Thoughts |
+|-------|-----------------------------------------------|------------------|
+| 20    | 1-STORY 1946 & NEWER ALL STYLES               | Category split by year built because of WWII housing boom, change of architecture and infrastructure. |
+| 30    | 1-STORY 1945 & OLDER                          | — |
+| 40    | 1-STORY W/FINISHED ATTIC ALL AGES             | — |
+| 45    | 1-1/2 STORY - UNFINISHED ALL AGES             | 1/2 story means partial or smaller upstairs level, usually with slanted ceiling, unfinished may mean the 2nd story is unusable |
+| 50    | 1-1/2 STORY FINISHED ALL AGES                 | — |
+| 60    | 2-STORY 1946 & NEWER                          | — |
+| 70    | 2-STORY 1945 & OLDER                          | — |
+| 75    | 2-1/2 STORY ALL AGES                          | Same here — check vs attic or 3rd flr? |
+| 80    | SPLIT OR MULTI-LEVEL                           | suburban type houses with split living spaces (ie living area bottom floor and bedrooms above) Typically 3 or 4 floors (incl basement?) — [Split level source](<https://therealestateguylv.com/blog/split-level-homes/#:~:text=A%20split-level%20home%20is%20a%20single-family%20dwelling%20with,above%2C%20and%20the%20recreational%20spaces%20or%20garages%20below.>) <BR> Note: split houses on a slope may tend to have smaller 2nd floors due to building contraints. We could investigate this interaction with the [Landslope](#landslope) feature|
+| 85    | SPLIT FOYER                                   | Reverse split — main living upstairs, bedrooms below |
+| 90    | DUPLEX - ALL STYLES AND AGES                  | Unit of housing with 2 seperate homes, above and below, or side-by-side. This most likely means the sale was for both units together (the full duplex)|
+| 120   | 1-STORY PUD - (planned unit development) 1946 & NEWER | These PUDs are like communities of houses which all pay their share towards private ammenities in the neightborhood, like parks, security, yard maintenance. Tend to be more cheaper than similar non-PUD houses |
+| 150   | 1-1/2 STORY PUD - ALL AGES                    | — |
+| 160   | 2-STORY PUD - 1946 & NEWER                    | — |
+| 180   | PUD - MULTILEVEL - INCL SPLIT LEV/FOYER       | — |
+| 190   | 2 FAMILY CONVERSION - ALL STYLES AND AGES     | — |
+
+*Cardianlity* - 16 <BR>
+*Nulls* - 0 <BR>
+*Feature interactions* - BldgType, HouseStyle, YearBuilt<BR>
+*Feature Engineering* - Binary feautres (BuildBefore_1946, isPUD), Semi-high cardinality, maybe target encoding would be useful?
+
+<BR><BR>
 
 
 [*back to feature list*](#feature-list)
 
 
-MSZoning: Identifies the general zoning classification of the sale.
+```python
+df['MSSubClass'].isna().sum() # ZERO NULLS
+```
+
+
+
+
+    0
+
+
+
+This feature is alsmost an amalgamation or kluster of other potential features.<BR>
+Would this be more useful split up into different features? (still leave original feature)<BR>
+1. Maybe we have a feature for number of stories (ie 1, 1.5, 2, 2.5 ,3) - (***Note: we already have feature [HouseStyle](#housestyle) which captures the number of stories and finished or unfinished***)
+2. a boolean feature for whether it is a PUD or not.
+3. Some of the features contain rough dates, do we keep these categories seperate or merge into one? We already have the feature yrBuilt telling us when the house was built maybe again we can create a binary feature telling us whether the building was built > 1945 (or been remodded since 1945?) - Then we can try reducing cardinality my merging the categories seperating classification by dates
+4. If we look at [BldgType](#bldgtype) it also contains the category duplex, [HouseStyle](#housestyle) for the number of stories and finished info, then if we create a binary feature for each isPUD and BuiltBefore_1946, we may be able to remove this feature and have the model perform better with the new.
+
+
+```python
+#print(f'Total Number of rows in train is: {df['MSSubClass'].count()}')
+```
+
+***TODO:*** Make the below into a function, decide what parameters are needed, to start we need labels, x, y, cmap color, Lognorm cmap or Norm cmap or PowerNorm cmap option, etc (if lognorm/PowerNorm -> how to label the ticks for the colorbar, if PowerNorm -> Gamma value?)
+
+
+```python
+from matplotlib import cm, colors
+# Box plot of the feature 
+
+# compute the counts per category 
+cat = 'MSSubClass'
+counts = df[cat].value_counts()
+order = sorted(df[cat].dropna().unique())
+
+
+# mapping the category code to the description for our xticks (yticks if horizontal)
+mssubclass_map = {
+     20: "1-STORY 1946 & NEWER ALL STYLES",
+     30: "1-STORY 1945 & OLDER",
+     40: "1-STORY W/FINISHED ATTIC ALL AGES",
+     45: "1-1/2 STORY – UNFINISHED ALL AGES",
+     50: "1-1/2 STORY FINISHED ALL AGES",
+     60: "2-STORY 1946 & NEWER",
+     70: "2-STORY 1945 & OLDER",
+     75: "2-1/2 STORY ALL AGES",
+     80: "SPLIT OR MULTI-LEVEL",
+     85: "SPLIT FOYER",
+     90: "DUPLEX – ALL STYLES AND AGES",
+    120: "1-STORY PUD (Planned Unit Dev) – 1946 & NEWER",
+    150: "1-1/2 STORY PUD – ALL AGES",
+    160: "2-STORY PUD – 1946 & NEWER",
+    180: "PUD – MULTILEVEL (INCL SPLIT LEV/FOYER)",
+    190: "2-FAMILY CONVERSION – ALL STYLES & AGES"
+}
+
+# Labels for the different categories
+labels = [f"{category} - {mssubclass_map[category]}" for category in order]
+
+# Create color map based on the value counts
+norm = colors.Normalize(vmin=counts.min(), vmax=counts.max())
+
+#or try lognorm for differnt cmap scaling
+norm = colors.LogNorm(vmin=counts.min(), vmax=counts.max())
+
+# last norm technique 'PowerNorm' like a gamma normalisation
+norm = colors.PowerNorm(gamma=0.4, vmin=counts.min(), vmax=counts.max())
+
+
+cmap = cm.get_cmap('plasma')
+#cmap = cm.get_cmap('viridis') # also good for powernorm
+#cmap = cm.get_cmap('inferno') # not bad for PowerNorm (gamma)
+#cmap = cm.get_cmap('cool')
+#cmap = cm.get_cmap('autumn')
+palette = [cmap(norm(counts[category])) for category in order]
+
+# Set the plot
+plot = sns.catplot(data=df, x='SalePrice', y='MSSubClass', kind='boxen',  height=7, aspect=1.8, palette=palette, orient='h')
+
+# Set the y-ticks
+plot.set_yticklabels(labels, rotation=90)
+plt.yticks(rotation=0)
+
+# Add the colour bar key for the value counts
+
+# Create a scalar mappable
+sm = cm.ScalarMappable(cmap=cmap, norm=norm) # norm is our normalisation of the value counts into [0,1] to map to the colors on the cmap
+
+cbar = plot.figure.colorbar(sm, ax=plot.ax, aspect=50, location='right')
+cbar.set_label('Number of Instances')
+
+# colorbar ticks for lognorm cmap
+custom_ticks = [5, 10, 25, 50, 100, 200, 500]  # or whatever makes sense
+cbar.set_ticks(custom_ticks)
+cbar.set_ticklabels([str(t) for t in custom_ticks])
+
+
+plt.title("SalesPrice by HSSubclass")
+plt.show()
+```
+
+    C:\Users\Scotts\AppData\Local\Temp\ipykernel_45816\3741891665.py:43: MatplotlibDeprecationWarning: The get_cmap function was deprecated in Matplotlib 3.7 and will be removed in 3.11. Use ``matplotlib.colormaps[name]`` or ``matplotlib.colormaps.get_cmap()`` or ``pyplot.get_cmap()`` instead.
+      cmap = cm.get_cmap('plasma')
+    C:\Users\Scotts\AppData\Local\Temp\ipykernel_45816\3741891665.py:51: FutureWarning: 
+    
+    Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `y` variable to `hue` and set `legend=False` for the same effect.
+    
+      plot = sns.catplot(data=df, x='SalePrice', y='MSSubClass', kind='boxen',  height=7, aspect=1.8, palette=palette, orient='h')
+    
+
+
+    
+![png](Remame_First_notebook_files/Remame_First_notebook_18_1.png)
+    
+
+
+
+```python
+counts
+```
+
+
+
+
+    MSSubClass
+    20     536
+    60     299
+    50     144
+    120     87
+    30      69
+    160     63
+    70      60
+    80      58
+    90      52
+    190     30
+    85      20
+    75      16
+    45      12
+    180     10
+    40       4
+    Name: count, dtype: int64
+
+
+
+From the above it doesnt look like many of the categories hold a lot of information about the price, we see a slight shift higher for the means as we move from 1-1 1/2 stories to 2+ (20-50) and (60-75). But not extrememly significant.<BR>
+The houses with the classification "Newer than 1946" (20 and 60) have significant variance (and generally higher means) in the prices compared to all the other categories.
+
+*TODO:* 
+<BR>We can try seperating by floor and producing another boxplot based off that.<BR>
+Explore the dates made after 1946<BR>
+See how if feature [HouseStyle](#housestyle) matching the number of floors in mssubclass's description, if it covers number of floors maybe we can then simplify this feature!
+
+
+## **MSZoning:** 
+***Description:*** Identifies the general zoning classification of the sale.
 		
 ***Categories***:
 
@@ -746,11 +910,70 @@ MSZoning: Identifies the general zoning classification of the sale.
        RM	Residential Medium Density
 	
 
+From the description and categories, we can understand roughly what this feature represents.  
+`MSZoning` refers to the **zoning classification of the land**, not necessarily the building itself.
+
+While categories like 'Commercial' or 'Industrial' exist, all properties in this dataset are residential (see `BldgType` for confirmation). So this likely means the house is located in a commercially-zoned **area**, not that it's a commercial **building**.
+
+- Still worth checking how zoning type correlates with price  
+- If some categories (like 'I' or 'FV') are very rare, we may group them into 'Other'  
+- Can we compare this to `BldgType`? Same for Industrial, Agriculture, etc.  
+- If some categories have very low counts, do we drop them or group into an 'Other'? Will they skew the data?  
+
+
+
+**Nulls:** 0  
+**Cardinality:** 8  
+**Expected importance:** Medium  
+**Feature Grouping:** Categorical, Geographical?, AreaType (or similar)?  
+**Encoding:** Not 100% obvious — a candidate for Target-guided ordinal encoding  
+**EDA ideas:**
+- See how MSZoning varies with `Neighborhood`, `BldgType`
+
+**Feature Engineering (optional, depending on EDA):**
+- Group rare categories (e.g. C, I, A) into ‘NonResidential’ or ‘Other’
+- Consider creating a new binary feature like `IsResidential`
+
+
+
+```python
+df['MSZoning'].isna().sum()
+```
+
+
+
+
+    0
+
+
+
+[*back to feature list*](#feature-list)
 
 ## **LotFrontage:**
 ***Description:*** Linear feet of street connected to property
+<BR>
+How much of the front of the property (lot) connects to the street.<BR>
+Higher value should correlate with higher sale price in general.<BR>
+Some PUDs may enforce a certain LotFrontage size to keep property values high.
+<BR><BR>
+**Nulls:** 17.7%<BR>
+**Null replacements:** null values could likely mean no lot frontage.
 
 [*back to feature list*](#feature-list)
+
+
+
+```python
+df['LotFrontage'].isna().sum()/1460
+```
+
+
+
+
+    0.1773972602739726
+
+
+
 
 ## **LotArea:**
 ***Description:*** Lot size in square feet
